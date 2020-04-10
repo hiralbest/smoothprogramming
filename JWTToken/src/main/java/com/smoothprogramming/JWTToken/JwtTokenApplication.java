@@ -17,9 +17,10 @@ public class JwtTokenApplication {
         SpringApplication.run(JwtTokenApplication.class, args);
         String jwtToken = generateJWTToken();
         verifyJWTToken(jwtToken);
+        decodeJWTToken(jwtToken);
     }
 
-    public static String generateJWTToken() {
+    private static String generateJWTToken() {
         String signatureSecret = "SECRET_VALUE_FOR_SIGNATURE";
         Algorithm algorithm = Algorithm.HMAC256(signatureSecret);
 
@@ -42,7 +43,11 @@ public class JwtTokenApplication {
         return jwtToken;
     }
 
-    public static void verifyJWTToken(String jwtToken) {
+    /**
+     * Verifies the token and decode the content.
+     * @param jwtToken
+     */
+    private static void verifyJWTToken(String jwtToken) {
         String signatureSecret = "SECRET_VALUE_FOR_SIGNATURE";
         Algorithm algorithm = Algorithm.HMAC256(signatureSecret);
 
@@ -55,4 +60,15 @@ public class JwtTokenApplication {
         System.out.println("Claim1 is "+ decodedJWT.getClaim("Claim1").asString());
         System.out.println("Claim2 is "+ decodedJWT.getClaim("Claim2").asString());
     }
+
+    /**
+     * Decode the JWT Token content.
+     * @param jwtToken
+     */
+    public static void decodeJWTToken(String jwtToken) {
+        DecodedJWT decodedJWT = JWT.decode(jwtToken);
+        System.out.println("Claim1 is "+ decodedJWT.getClaim("Claim1").asString());
+        System.out.println("Claim2 is "+ decodedJWT.getClaim("Claim2").asString());
+    }
+
 }
